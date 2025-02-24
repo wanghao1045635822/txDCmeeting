@@ -17,6 +17,7 @@ const userInfo = sessionStorage.getItem('tuiRoom-userInfo');
 const roomId = String(route.query.roomId);
 conference.setLanguage(getLanguage() as LanguageOption);
 conference.setTheme(getTheme() as ThemeOption);
+
 let isMaster = false;
 let isExpectedJump = false;
 
