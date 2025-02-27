@@ -45,11 +45,12 @@ export const EXPIRETIME = 2592000;
  */
 export const userInfo = {
   // UserId
-  userId: `user_${Math.ceil(Math.random() * 100000)}`,
+  // userId: `user_${Math.ceil(Math.random() * 100000)}`,
+  userId: `user_88919`,
   // UserName
   userName: '王浩',
   // UserAvatar
-  avatarUrl: '',
+  avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy2i9-YpJeTcUv70ltzp62XBcflAQeC-bV2w&s',
 };
 
 export function getBasicInfo() {
@@ -68,3 +69,4 @@ export function getBasicInfo() {
     avatarUrl,
   };
 };
+

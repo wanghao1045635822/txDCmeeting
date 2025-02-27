@@ -36,6 +36,7 @@ export default defineConfig({
   ],
   server: {
     open: true,
+    // host: '10.10.20.24',
     port: 3000,
     // Solve the problem of infinite page refresh after whistle proxy
     hmr: {

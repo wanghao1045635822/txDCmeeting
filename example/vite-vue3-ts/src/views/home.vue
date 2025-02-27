@@ -8,11 +8,10 @@
     @on-logout="handleLogOut"
     @on-update-user-name="handleUpdateUserName"
   ></pre-conference-view>
-<!--  <ConferenceMainView></ConferenceMainView>-->
 </template>
 
 <script setup lang="ts">
-import { PreConferenceView, conference, RoomEvent, LanguageOption, ThemeOption,ConferenceMainView } from '@tencentcloud/roomkit-web-vue3';
+import { PreConferenceView, conference, RoomEvent, LanguageOption, ThemeOption } from '@tencentcloud/roomkit-web-vue3';
 import { getBasicInfo } from '@/config/basic-info-config';
 import router from '@/router';
 import { useRoute } from 'vue-router';
@@ -146,3 +145,9 @@ onUnmounted(() => {
 handleInit();
 
 </script>
+
+<style lang="scss" scoped>
+  :deep(.logo-container .svg-icon){
+    display: none;
+  }
+</style>
