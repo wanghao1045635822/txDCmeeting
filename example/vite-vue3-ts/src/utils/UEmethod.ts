@@ -2,12 +2,18 @@
  * create 2024-11-11 18:23:42 By wanghao
  * 全局方法封装
  * */
-import {useMeetingCenterStore, useFriendStore} from "@/store";
+import {userInfo} from "../config/basic-info-config";
+import {useUserStore, useFriendStore} from "../store/index";
 
-// console.log(useMeetingCenterStore)
-import {nextTick, reactive} from "vue";
-import MsgId from "@/proto/msgid_pb";
-import * as Proto from "@/proto/meeting_pb.js";
+import { setActivePinia, createPinia } from 'pinia';
+
+// 确保有活跃的 Pinia 实例
+setActivePinia(createPinia());
+
+const userStore = useUserStore();
+const friendStore = useFriendStore();
+
+import MsgId from "@/proto/msgid_pb.js";
 import * as friend_pb from "@/proto/friend_pb.js";
 
 // 数据转化：Uint8Array 转换为 JavaScript 字符串（FsString）
@@ -59,9 +65,6 @@ export const jsCallUE = (id, data) => {
 // 提供给UE的方法
 window.uemsgack = function (id, data) {
 
-    const meetingCenterStore = useMeetingCenterStore();
-    const friendStore = useFriendStore();
-
     // console.log('=========================ue返回的参数id====================:',id);
     console.log("%c ================ue返回的参数id====================:", "color: #52d10a;", id);
     switch (id) {
@@ -75,79 +78,12 @@ window.uemsgack = function (id, data) {
 };
 
 
-// 调用UE的webgetroleid方法获取角色id
-export const webGetRoleId = () => {
-    try {
-        // alert("调用UE里的 webgetroleid 函数");
-        ue.ueobj.webgetroleid().then(() => {
-            // alert('调用了UE里的函数!');
-        });
-    } catch (e) {
-        console.error("ReferenceError: ue is not defined");
-        // console.log('%cReferenceError: ue is not defined', 'font-weight: bold; font-size: 12px; color: red');
-    }
-};
-
-
-// ue返回的会议角色id
-window.uesetroleid = function (id) {
-    const meetingCenterStore = useMeetingCenterStore();
-    console.log("%c ================ue返回的会议角色id====================:", "color: #52d10a;", id);
-    meetingCenterStore.updateRoleId(id);
-};
-
-
-// 调用UE的webuploadfile方法获取文件路径  type 0:会议封面图片 1:会议字幕屏幕图片(左)  2:会议字幕屏幕图片(右)
-export const webuploadfile = (type) => {
-    const meetingCenterStore = useMeetingCenterStore();
-    try {
-        // alert("调用UE里的 webuploadfile 函数");
-        ue.ueobj.webuploadfile(type).then(() => {
-            meetingCenterStore.loading = true;
-            // alert('调用了UE里的函数!');
-        });
-    } catch (e) {
-        console.error("ReferenceError: ue is not defined");
-        // console.log('%cReferenceError: ue is not defined', 'font-weight: bold; font-size: 12px; color: red');
-    }
-};
-
-let imageUrl = 'https://oss.test.kuailaiyuanyuzhou.com/';//配置服务器图片地址
-// ue返回的上传图片信息
-window.uploadImage = function (error, errorData, data, name, requestid = '1') {
-    const meetingCenterStore = useMeetingCenterStore();
-    console.log("%c ================ue返回的图片上传信息====================:", "color: #52d10a;", error, errorData, data, name, requestid);
-    console.log("%c error:", "color: #52d10a;", error);
-    console.log("%c errorData:", "color: #52d10a;", errorData);
-    console.log("%c data:", "color: #52d10a;", data);
-    console.log("%c name:", "color: #52d10a;", name);
-    console.log("%c requestid:", "color: #52d10a;", requestid);
-    if (error) {
-        if (data && requestid === '0') {
-            // meetingCenterStore.coverImage = imageUrl + '20240730-150250_1728975865_208.png' //封面图片;
-            meetingCenterStore.coverImage = imageUrl + data //封面图片;
-        } else if (data && requestid === '1') {
-            meetingCenterStore.displayImageA = {
-                url: imageUrl + data,
-                name: name,
-            } //展示区图片A;
-        } else if (data && requestid === '2') {
-            meetingCenterStore.displayImageB = {
-                url: imageUrl + data,
-                name: name,
-            } //展示区图片B;
-        }
-    } else {
-        console.log('上传失败信息：', errorData);
-    }
-    meetingCenterStore.loading = false;
-};
 
 
 // 调用UE的webgetaccountinfo方法获取用户信息
 export const webgetaccountinfo = () => {
     try {
-        // alert("调用UE里的 webuploadfile 函数");
+        alert("调用UE里的 webuploadfile 函数");
         ue.ueobj.webgetaccountinfo().then(() => {
             // alert('调用了UE里的函数!');
         });
@@ -156,11 +92,18 @@ export const webgetaccountinfo = () => {
         // console.log('%cReferenceError: ue is not defined', 'font-weight: bold; font-size: 12px; color: red');
     }
 };
+
+// 获取用户信息
+webgetaccountinfo();
+
+
 // ue返回的角色信息
 window.uesetroleInfo = function (data) {
-    const meetingCenterStore = useMeetingCenterStore();
     console.log("%c ================ue返回的角色信息====================:", "color: #52d10a;", data);
-    meetingCenterStore.updateRoleInfo(data);
+    // userStore.updateRoleInfo(data);
+    userInfo.userId = 'user_'+data.role_id;
+    userInfo.userName = data.role_name;
+    // userInfo.avatarUrl = data.userId;
 };
 
 
@@ -191,12 +134,7 @@ export const webattendmeeting = (meetingid) => {
     }
 };
 
-// ue返回的进入会议信息
-window.ueattendmeeting = function (data) {
-    const meetingCenterStore = useMeetingCenterStore();
-    console.log("%c ================ue返回的进入会议信息====================:", "color: #52d10a;", data);
-    meetingCenterStore.updateAttendMeeting(data);
-};
+
 
 
 // 调用UE的webcloseui退出会议方法

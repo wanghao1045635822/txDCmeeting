@@ -20,7 +20,8 @@ const useUserStore = defineStore('user', {
     certification: undefined,
     role: '',
     resources:undefined,
-    hrefUrl:undefined
+    hrefUrl:undefined,
+    roleInfo: {},//角色信息
   }),
 
   getters: {
@@ -36,9 +37,9 @@ const useUserStore = defineStore('user', {
         resolve(this.role);
       });
     },
-    // Set user's information
-    setInfo(partial: Partial<UserState>) {
-
+    // 更新登录角色信息
+    updateRoleInfo(data: any) {
+      this.roleInfo = data;
     },
   },
 });
