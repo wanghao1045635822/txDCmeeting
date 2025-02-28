@@ -10,20 +10,20 @@ import router from '@/router';
 import i18n, { useI18n } from '../locales/index';
 import { getLanguage, getTheme } from  '../utils/utils';
 const { t } = useI18n();
-conference.setParticipants([
-  { userId: 'user_00001', userName: '盖伟',  avatarUrl: '' },
-  { userId: 'user_00002', userName: '高志伟',  avatarUrl: '' },
-  { userId: 'user_00003', userName: '韩申申',  avatarUrl: '' },
-  { userId: 'user_00004', userName: '李帅朋',  avatarUrl: '' },
-  { userId: 'user_00005', userName: '牛农恳',  avatarUrl: '' },
-  { userId: 'user_00006', userName: '贾文泽',  avatarUrl: '' },
-  { userId: 'user_00007', userName: '徐国雄',  avatarUrl: '' },
-  { userId: 'user_00008', userName: '赵磊',  avatarUrl: '' },
-  { userId: 'user_00009', userName: '钟广荣',  avatarUrl: '' },
-  { userId: 'user_00010', userName: '周同斌',  avatarUrl: '' },
-  { userId: 'user_00011', userName: '沈智杰',  avatarUrl: '' },
-  { userId: 'user_00012', userName: '王浩',  avatarUrl: '' },
-]);
+// conference.setParticipants([
+//   { userId: 'user_00001', userName: '盖伟',  avatarUrl: '' },
+//   { userId: 'user_00002', userName: '高志伟',  avatarUrl: '' },
+//   { userId: 'user_00003', userName: '韩申申',  avatarUrl: '' },
+//   { userId: 'user_00004', userName: '李帅朋',  avatarUrl: '' },
+//   { userId: 'user_00005', userName: '牛农恳',  avatarUrl: '' },
+//   { userId: 'user_00006', userName: '贾文泽',  avatarUrl: '' },
+//   { userId: 'user_00007', userName: '徐国雄',  avatarUrl: '' },
+//   { userId: 'user_00008', userName: '赵磊',  avatarUrl: '' },
+//   { userId: 'user_00009', userName: '钟广荣',  avatarUrl: '' },
+//   { userId: 'user_00010', userName: '周同斌',  avatarUrl: '' },
+//   { userId: 'user_00011', userName: '沈智杰',  avatarUrl: '' },
+//   { userId: 'user_00012', userName: '王浩',  avatarUrl: '' },
+// ]);
 const route = useRoute();
 const roomInfo = sessionStorage.getItem('tuiRoom-roomInfo');
 const userInfo = sessionStorage.getItem('tuiRoom-userInfo');

@@ -138,13 +138,28 @@ const changeTheme = (theme: ThemeOption) => {
 //   隐藏应用程序中的特定功能按钮。调用此函数并传入适当的 FeatureButton 枚举值后，相应的按钮将从用户界面中隐藏。
 conference.hideFeatureButton(FeatureButton.SwitchTheme);//换肤
 conference.hideFeatureButton(FeatureButton.SwitchLanguage);//语言
+// 初始化设置语言
+conference.setLanguage('zh-CN');
+// 设置界面主题。
+conference.setTheme('DARK');
+conference.setParticipants([
+  { userId: 'user_00001', userName: '盖伟',  avatarUrl: '' },
+  { userId: 'user_00002', userName: '高志伟',  avatarUrl: '' },
+  { userId: 'user_00003', userName: '韩申申',  avatarUrl: '' },
+  { userId: 'user_00004', userName: '李帅朋',  avatarUrl: '' },
+  { userId: 'user_00005', userName: '牛农恳',  avatarUrl: '' },
+  { userId: 'user_00006', userName: '贾文泽',  avatarUrl: '' },
+  { userId: 'user_00007', userName: '徐国雄',  avatarUrl: '' },
+  { userId: 'user_00008', userName: '赵磊',  avatarUrl: '' },
+  { userId: 'user_00009', userName: '钟广荣',  avatarUrl: '' },
+  { userId: 'user_00010', userName: '周同斌',  avatarUrl: '' },
+  { userId: 'user_00011', userName: '沈智杰',  avatarUrl: '' },
+  { userId: 'user_00012', userName: '王浩',  avatarUrl: '' },
+]);
 onMounted(() => {
   conference.on(RoomEvent.LANGUAGE_CHANGED, changeLanguage);
   conference.on(RoomEvent.THEME_CHANGED, changeTheme);
-  // 初始化设置语言
-  conference.setLanguage('zh-CN');
-  // 设置界面主题。
-  conference.setTheme('DARK');
+
 });
 
 onUnmounted(() => {

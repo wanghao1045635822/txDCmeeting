@@ -14,6 +14,7 @@ const userStore = useUserStore();
 const friendStore = useFriendStore();
 
 import MsgId from "@/proto/msgid_pb.js";
+
 import * as friend_pb from "@/proto/friend_pb.js";
 
 // 数据转化：Uint8Array 转换为 JavaScript 字符串（FsString）
