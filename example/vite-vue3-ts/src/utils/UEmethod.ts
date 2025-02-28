@@ -83,7 +83,7 @@ window.uemsgack = function (id, data) {
 // 调用UE的webgetaccountinfo方法获取用户信息
 export const webgetaccountinfo = () => {
     try {
-        alert("调用UE里的 webuploadfile 函数");
+        // alert("调用UE里的 webuploadfile 函数");
         ue.ueobj.webgetaccountinfo().then(() => {
             // alert('调用了UE里的函数!');
         });
@@ -98,12 +98,14 @@ webgetaccountinfo();
 
 
 // ue返回的角色信息
-window.uesetroleInfo = function (data) {
+window.uesetroleInfo =async function (data) {
     console.log("%c ================ue返回的角色信息====================:", "color: #52d10a;", data);
     // userStore.updateRoleInfo(data);
     userInfo.userId = 'user_'+data.role_id;
     userInfo.userName = data.role_name;
     // userInfo.avatarUrl = data.userId;
+    // 如果您需要自定义昵称或头像，可以使用如下接口进行更新：由于用户隐私限制，昵称和头像更新可能会有延迟。如您需要更高的实时性，可以使用会中修改昵称功能。
+    // await TUIRoomEngine.setSelfInfo({ userName: 'jack', avatarUrl: 'http://xxx' });
 };
 
 

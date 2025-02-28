@@ -11,13 +11,14 @@
 </template>
 
 <script setup lang="ts">
-import { PreConferenceView, conference, RoomEvent, LanguageOption, ThemeOption } from '@tencentcloud/roomkit-web-vue3';
+import { PreConferenceView, conference, RoomEvent, LanguageOption, ThemeOption ,FeatureButton} from '@tencentcloud/roomkit-web-vue3';
 import { getBasicInfo } from '@/config/basic-info-config';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import { Ref, ref, reactive, onMounted, onUnmounted } from 'vue';
 import i18n from '../locales/index';
 import { getLanguage, getTheme } from  '../utils/utils';
+import {webcloseui} from "@/utils/UEmethod";
 
 const route = useRoute();
 const { roomId } = route.query;
@@ -105,6 +106,7 @@ async function handleLogOut() {
 /**
  * The accessor handles the logout method
 **/
+  webcloseui();
 }
 
 async function handleInit() {
@@ -132,9 +134,17 @@ const changeLanguage = (language: LanguageOption) => {
 const changeTheme = (theme: ThemeOption) => {
   localStorage.setItem('tuiRoom-currentTheme', theme);
 };
+//   hideFeatureButton
+//   隐藏应用程序中的特定功能按钮。调用此函数并传入适当的 FeatureButton 枚举值后，相应的按钮将从用户界面中隐藏。
+conference.hideFeatureButton(FeatureButton.SwitchTheme);//换肤
+conference.hideFeatureButton(FeatureButton.SwitchLanguage);//语言
 onMounted(() => {
   conference.on(RoomEvent.LANGUAGE_CHANGED, changeLanguage);
   conference.on(RoomEvent.THEME_CHANGED, changeTheme);
+  // 初始化设置语言
+  conference.setLanguage('zh-CN');
+  // 设置界面主题。
+  conference.setTheme('DARK');
 });
 
 onUnmounted(() => {
