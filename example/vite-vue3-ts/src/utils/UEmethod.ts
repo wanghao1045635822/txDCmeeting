@@ -13,9 +13,9 @@ setActivePinia(createPinia());
 const userStore = useUserStore();
 const friendStore = useFriendStore();
 
-import MsgId from "@/proto/msgid_pb.js";
+import MsgId from "../proto/msgid_pb.js";
 
-import * as friend_pb from "@/proto/friend_pb.js";
+import * as office_pb from "../proto/office_pb.js";
 
 // 数据转化：Uint8Array 转换为 JavaScript 字符串（FsString）
 export const toFsString = (data) => {
@@ -69,11 +69,11 @@ window.uemsgack = function (id, data) {
     // console.log('=========================ue返回的参数id====================:',id);
     console.log("%c ================ue返回的参数id====================:", "color: #52d10a;", id);
     switch (id) {
-        //   返回好友列表 1402
-        case MsgId.C2S_FRIEND_LIST_REQ:
-            const S2CFriendListAckData = friend_pb.default.S2CFriendListAck.deserializeBinary(hexToBuffer(data));
-            console.log("%c 1402返回参数:", "color: #52d10a;", S2CFriendListAckData.toObject());
-            friendStore.updateFriendListInfo(S2CFriendListAckData.toObject());
+        //   获得办公人员列表结果 2209
+        case MsgId.S2C_GET_OFFICE_WORKER_LIST_ACK:
+            const S2CGetOfficeWorkerListAckData = office_pb.default.S2CGetOfficeWorkerListAck.deserializeBinary(hexToBuffer(data));
+            console.log("%c 2209返回参数:", "color: #52d10a;", S2CGetOfficeWorkerListAckData.toObject());
+            // friendStore.updateFriendListInfo(S2CGetOfficeWorkerListAckData.toObject());
             break;
     }
 };

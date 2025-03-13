@@ -166,7 +166,7 @@ enum MsgId
 	S2C_CLEAR_GROUP_CHAT_HISTORY_ACK 					= 1822; // 玩家清空自己的组聊天记录返回
 	S2C_GROUP_END										= 1823;
 	
-	//会议相关
+	//会议相关 2000-2200
 	C2S_MEETING_BEGIN									= 2000;	// 会议开始
 	C2S_GET_MEETING_LIST_REQ 							= 2001; // 请求会议信息列表
 	S2C_GET_MEETING_LIST_ACK 							= 2002; // 返回会议信息列表
@@ -256,12 +256,7 @@ enum MsgId
 	S2C_MEETING_COMMENT_REPLY_ACK 						= 2088; // 返回回复会议评论结果
 	C2S_MEETING_GIFT_GIVING_REQ 						= 2089; // 请求会议送礼
 	S2C_MEETING_GIFT_GIVING_ACK 						= 2090; // 返回会议送礼结果
-	C2S_GET_OFFICE_AREA_LIST_REQ 						= 2091;	// 获得办公区域列表
-	S2C_GET_OFFICE_AREA_LIST_ACK 						= 2092; // 获得办公区域列表结果
-	C2S_ENTER_OFFICE_AREA_REQ 							= 2093;	// 进入办公区域
-	S2C_ENTER_OFFICE_AREA_ACK 							= 2094; // 进入办公区域结果
-	C2S_LEAVE_OFFICE_AREA_REQ 							= 2095;	// 离开办公区域
-	S2C_LEAVE_OFFICE_AREA_ACK 							= 2096; // 离开办公区域结果
+
 	C2S_GET_TODAY_MEETING_LIST_REQ 						= 2097; // 请求今日会议信息列表
 	S2C_GET_TODAY_MEETING_LIST_ACK 						= 2098; // 返回今日会议信息列表
 	C2S_GET_OPEN_MEETING_LIST_REQ 						= 2099; // 请求开放会议信息列表
@@ -272,14 +267,20 @@ enum MsgId
 	S2C_GET_HISTORY_MEETING_LIST_ACK 					= 2104; // 返回过往会议信息列表
 	C2S_GET_MY_MEETING_LIST_REQ 						= 2105; // 请求我的会议信息列表
 	S2C_GET_MY_MEETING_LIST_ACK 						= 2106; // 返回我的会议信息列表
-	S2C_MEETING_END										= 2120;	// 会议结束
+	S2C_MEETING_RULER_NOTIFY 							= 2107;	// 当前会议权限持有人
+	S2C_RECON_MEETING_ID_NOTIFY							= 2108;  // 断线重连通知其会议id
+	S2C_MEETING_END										= 2140;	// 会议结束
 	
-	//物品
-	C2S_GET_ALL_ITEMS_LIST_REQ							= 2200; // 获取所有道具
-	S2C_GET_ALL_ITEMS_LIST_ACK							= 2201; // 获取所有道具结果
-	C2S_USE_ITEM_REQ									= 2202; // 使用道具
-	S2C_USE_ITEM_ACK									= 2203; // 使用道具结果
-	C2S_SELL_ITEM_REQ									= 2204; // 出售道具
-	S2C_SELL_ITEM_ACK									= 2205; // 出售道具结果
-}
+	//办公2201-2400
+	C2S_OFFICE_BEGIN									= 2201;	// 办公开始
+	C2S_GET_OFFICE_AREA_LIST_REQ 						= 2202;	// 获得办公区域列表
+	S2C_GET_OFFICE_AREA_LIST_ACK 						= 2203; // 获得办公区域列表结果
+	C2S_ENTER_OFFICE_AREA_REQ 							= 2204;	// 进入办公区域
+	S2C_ENTER_OFFICE_AREA_ACK 							= 2205; // 进入办公区域结果
+	C2S_LEAVE_OFFICE_AREA_REQ 							= 2206;	// 离开办公区域
+	S2C_LEAVE_OFFICE_AREA_ACK 							= 2207; // 离开办公区域结果
+	C2S_GET_OFFICE_WORKER_LIST_REQ						= 2208;	// 获得办公人员列表
+	S2C_GET_OFFICE_WORKER_LIST_ACK						= 2209;	// 获得办公人员列表结果
+	C2S_OFFICE_END										= 2210;	// 办公结束
 
+}

@@ -15,10 +15,13 @@ import { PreConferenceView, conference, RoomEvent, LanguageOption, ThemeOption ,
 import { getBasicInfo } from '@/config/basic-info-config';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-import { Ref, ref, reactive, onMounted, onUnmounted } from 'vue';
+import { Ref, ref, reactive,onBeforeMount, onMounted, onUnmounted,watch } from 'vue';
 import i18n from '../locales/index';
 import { getLanguage, getTheme } from  '../utils/utils';
-import {webcloseui} from "@/utils/UEmethod";
+import * as Proto from "../proto/office_pb.js";
+import { jsCallUE, toFsString,webcloseui } from "@/utils/UEmethod";
+import MsgId from "@/proto/msgid_pb.js";
+import { useFriendStore } from "@/store"
 
 const route = useRoute();
 const { roomId } = route.query;
@@ -30,6 +33,16 @@ const userInfo = reactive({
   avatarUrl: '',
 });
 
+const friendStore = useFriendStore();
+
+let personnelList: any = ref([]);
+
+// 监听人员列表变化
+watch(() => friendStore.friendList, (newFriendList) => {
+  if (newFriendList) {
+    personnelList.value = newFriendList;
+  }
+});
 
 function setTUIRoomData(action: string, roomOption: Record<string, any>) {
   sessionStorage.setItem('tuiRoom-roomInfo', JSON.stringify({
@@ -139,27 +152,49 @@ const changeTheme = (theme: ThemeOption) => {
 conference.hideFeatureButton(FeatureButton.SwitchTheme);//换肤
 conference.hideFeatureButton(FeatureButton.SwitchLanguage);//语言
 // 初始化设置语言
-conference.setLanguage('zh-CN');
+conference.setLanguage(getLanguage() as LanguageOption);
 // 设置界面主题。
 conference.setTheme('DARK');
-conference.setParticipants([
-  { userId: 'user_00001', userName: '盖伟',  avatarUrl: '' },
-  { userId: 'user_00002', userName: '高志伟',  avatarUrl: '' },
-  { userId: 'user_00003', userName: '韩申申',  avatarUrl: '' },
-  { userId: 'user_00004', userName: '李帅朋',  avatarUrl: '' },
-  { userId: 'user_00005', userName: '牛农恳',  avatarUrl: '' },
-  { userId: 'user_00006', userName: '贾文泽',  avatarUrl: '' },
-  { userId: 'user_00007', userName: '徐国雄',  avatarUrl: '' },
-  { userId: 'user_00008', userName: '赵磊',  avatarUrl: '' },
-  { userId: 'user_00009', userName: '钟广荣',  avatarUrl: '' },
-  { userId: 'user_00010', userName: '周同斌',  avatarUrl: '' },
-  { userId: 'user_00011', userName: '沈智杰',  avatarUrl: '' },
-  { userId: 'user_00012', userName: '王浩',  avatarUrl: '' },
-]);
+// 获取好友列表，并将结果存储在会话存储中。
+// conference.setParticipants(personnelList.value);
+console.log(friendStore.friendList,'好友列表')
+conference.setParticipants(friendStore.friendList);
+
+
+// 请求获得办公人员列表
+const getOfficeWorkerList = (data) => {
+  console.log(MsgId.C2S_GET_OFFICE_WORKER_LIST_REQ,'获得办公人员列表Id');
+  // 请求获得办公人员
+  let InfoReq = new Proto.default.C2SGetOfficeWorkerListReq();
+  InfoReq.setSceneid(3001);
+  InfoReq.setScenekey(0);
+  // 序列化
+  const bytes = InfoReq.serializeBinary();
+
+  console.log("请求获得办公人员列表 data:", bytes);
+
+  // 反序列化
+  const userDeserialized = Proto.default.C2SGetOfficeWorkerListReq.deserializeBinary(bytes);
+  console.log("Deserialized data:", userDeserialized.toObject());
+  console.log(JSON.stringify(userDeserialized.toObject()));
+
+  jsCallUE(MsgId.C2S_GET_OFFICE_WORKER_LIST_REQ,bytes);
+};
+
+function init() {
+  // 获得办公人员列表
+  getOfficeWorkerList();
+}
+
+onBeforeMount(() => {
+  init();
+});
+
 onMounted(() => {
   conference.on(RoomEvent.LANGUAGE_CHANGED, changeLanguage);
   conference.on(RoomEvent.THEME_CHANGED, changeTheme);
-
+  // 初始化设置语言
+  conference.setLanguage('zh-CN');
 });
 
 onUnmounted(() => {

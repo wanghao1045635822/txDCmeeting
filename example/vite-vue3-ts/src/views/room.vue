@@ -39,7 +39,6 @@ if (!roomId) {
 } else if (!roomInfo) {
   router.push({ path: 'home', query: { roomId } });
 }
-
 onMounted(async () => {
   const { action, isSeatEnabled, roomParam, hasCreated } = JSON.parse(roomInfo as string);
   const { sdkAppId, userId, userSig, userName, avatarUrl } = JSON.parse(userInfo as string);
@@ -108,7 +107,8 @@ conference.on(RoomEvent.USER_SIG_EXPIRED, backToHomeAndClearUserInfo);
 conference.on(RoomEvent.USER_LOGOUT, backToHomeAndClearUserInfo);
 conference.on(RoomEvent.LANGUAGE_CHANGED, changeLanguage);
 conference.on(RoomEvent.THEME_CHANGED, changeTheme);
-
+// await trtc.startLocalVideo({ view: 'local-video' });
+// await trtc.updateLocalVideo({ publish: true });
 onUnmounted(() => {
   conference.off(RoomEvent.ROOM_DISMISS, backToHome);
   conference.off(RoomEvent.ROOM_LEAVE, backToHome);
