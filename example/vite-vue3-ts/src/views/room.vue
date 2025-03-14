@@ -9,7 +9,10 @@ import { onBeforeRouteLeave, useRoute } from 'vue-router';
 import router from '@/router';
 import i18n, { useI18n } from '../locales/index';
 import { getLanguage, getTheme } from  '../utils/utils';
+import {useFriendStore} from "@/store";
+const friendStore = useFriendStore();
 const { t } = useI18n();
+// console.log("%c friend列表:", "color: #52d10a;", friendStore.friendList);
 // conference.setParticipants([
 //   { userId: 'user_00001', userName: '盖伟',  avatarUrl: '' },
 //   { userId: 'user_00002', userName: '高志伟',  avatarUrl: '' },
@@ -109,6 +112,10 @@ conference.on(RoomEvent.LANGUAGE_CHANGED, changeLanguage);
 conference.on(RoomEvent.THEME_CHANGED, changeTheme);
 // await trtc.startLocalVideo({ view: 'local-video' });
 // await trtc.updateLocalVideo({ publish: true });
+// 初始化设置语言
+conference.setLanguage(getLanguage() as LanguageOption);
+// 设置界面主题。
+conference.setTheme('DARK');
 onUnmounted(() => {
   conference.off(RoomEvent.ROOM_DISMISS, backToHome);
   conference.off(RoomEvent.ROOM_LEAVE, backToHome);

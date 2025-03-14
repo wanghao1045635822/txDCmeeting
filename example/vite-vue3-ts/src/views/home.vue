@@ -38,11 +38,20 @@ const friendStore = useFriendStore();
 let personnelList: any = ref([]);
 
 // 监听人员列表变化
-watch(() => friendStore.friendList, (newFriendList) => {
-  if (newFriendList) {
-    personnelList.value = newFriendList;
+watch(
+  () => friendStore.friendList,
+  (newVal, oldVal) => {
+    console.log("friendList changed:", newVal);
+    personnelList.value = newVal;
+    console.log("%c friendList:=======================", "color: #52d10a;", friendStore.friendList);
+    // 获取好友列表，并将结果存储在会话存储中。
+    conference.setParticipants(personnelList.value);
+  },
+  {
+    deep: true, // 开启深度监听
+    immediate: true
   }
-});
+);
 
 function setTUIRoomData(action: string, roomOption: Record<string, any>) {
   sessionStorage.setItem('tuiRoom-roomInfo', JSON.stringify({
@@ -155,10 +164,11 @@ conference.hideFeatureButton(FeatureButton.SwitchLanguage);//语言
 conference.setLanguage(getLanguage() as LanguageOption);
 // 设置界面主题。
 conference.setTheme('DARK');
-// 获取好友列表，并将结果存储在会话存储中。
-// conference.setParticipants(personnelList.value);
-console.log(friendStore.friendList,'好友列表')
-conference.setParticipants(friendStore.friendList);
+
+
+// // 获取好友列表，并将结果存储在会话存储中。
+// console.log(friendStore.friendList,'好友列表')
+// conference.setParticipants(friendStore.friendList);
 
 
 // 请求获得办公人员列表

@@ -2,7 +2,7 @@
   "name": "@tencentcloud/room-uikit-vue",
   "version": "2.8.2",
   "scripts": {
-    "dev": "vite --force --host",
+    "dev": "vite --force",
     "build": "vue-tsc --noEmit --skipLibCheck && vite build",
     "preview": "vite preview",
     "lint": "./node_modules/.bin/eslint ./src --no-error-on-unmatched-pattern"

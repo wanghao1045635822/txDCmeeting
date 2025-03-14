@@ -72,8 +72,26 @@ window.uemsgack = function (id, data) {
         //   获得办公人员列表结果 2209
         case MsgId.S2C_GET_OFFICE_WORKER_LIST_ACK:
             const S2CGetOfficeWorkerListAckData = office_pb.default.S2CGetOfficeWorkerListAck.deserializeBinary(hexToBuffer(data));
-            console.log("%c 2209返回参数:", "color: #52d10a;", S2CGetOfficeWorkerListAckData.toObject());
-            // friendStore.updateFriendListInfo(S2CGetOfficeWorkerListAckData.toObject());
+            let dataWorker = S2CGetOfficeWorkerListAckData.toObject();
+            console.log("%c 2209返回参数:", "color: #52d10a;", dataWorker);
+            if(dataWorker.errcode === 0){
+              let friendList = dataWorker.infosList.map(item => {
+                return {
+                  userId: 'user_'+item.roleId,
+                  userName: item.realName,
+                  avatarUrl: item.icon,
+                  // roleId: item.roleid,
+                  // roleName: item.rolename,
+                  // roleType: item.roletype,
+                  // roleLevel: item.rolelevel,
+                  // roleLevelName: item.rolelevelname,
+                  // roleLevelIcon: item.rolelevelicon,
+                  // roleLevelIconUrl:item.roleleveliconurl,
+                }
+              });
+              console.log("%c friendList:", "color: #52d10a;", friendList);
+              friendStore.updateFriendInfo(friendList);
+            }
             break;
     }
 };
