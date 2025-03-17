@@ -16,6 +16,7 @@ const friendStore = useFriendStore();
 import MsgId from "../proto/msgid_pb.js";
 
 import * as office_pb from "../proto/office_pb.js";
+import EventBus from "./EventBus";
 
 // 数据转化：Uint8Array 转换为 JavaScript 字符串（FsString）
 export const toFsString = (data) => {
@@ -90,7 +91,8 @@ window.uemsgack = function (id, data) {
                 }
               });
               console.log("%c friendList:", "color: #52d10a;", friendList);
-              friendStore.updateFriendInfo(friendList);
+              friendStore.updateFriendListInfo(friendList);
+              // EventBus.emit('getOfficeWorkerListFun', friendList)
             }
             break;
     }

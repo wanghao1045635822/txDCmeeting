@@ -22,7 +22,7 @@ import * as Proto from "../proto/office_pb.js";
 import { jsCallUE, toFsString,webcloseui } from "@/utils/UEmethod";
 import MsgId from "@/proto/msgid_pb.js";
 import { useFriendStore } from "@/store"
-
+import EventBus from "@/utils/EventBus";
 const route = useRoute();
 const { roomId } = route.query;
 const givenRoomId: Ref<string> = ref((roomId) as string);
@@ -205,11 +205,21 @@ onMounted(() => {
   conference.on(RoomEvent.THEME_CHANGED, changeTheme);
   // 初始化设置语言
   conference.setLanguage('zh-CN');
+
+  EventBus.on("getOfficeWorkerListFun", (data) => {
+    // getMeetingRoomList();
+    console.log(data, "传来的会议时间");
+
+  });
+
+
+
 });
 
 onUnmounted(() => {
   conference.off(RoomEvent.LANGUAGE_CHANGED, changeLanguage);
   conference.off(RoomEvent.THEME_CHANGED, changeTheme);
+  EventBus.off("getOfficeWorkerListFun");
 });
 
 handleInit();
