@@ -21,7 +21,7 @@ import { getLanguage, getTheme } from  '../utils/utils';
 import * as Proto from "../proto/office_pb.js";
 import { jsCallUE, toFsString,webcloseui } from "@/utils/UEmethod";
 import MsgId from "@/proto/msgid_pb.js";
-import { useFriendStore } from "@/store"
+import { useFriendStore } from "@/store";
 import EventBus from "@/utils/EventBus";
 const route = useRoute();
 const { roomId } = route.query;
@@ -44,12 +44,12 @@ watch(
     console.log("friendList changed:", newVal);
     personnelList.value = newVal;
     console.log("%c friendList:=======================", "color: #52d10a;", friendStore.friendList);
-    // 获取好友列表，并将结果存储在会话存储中。
-    conference.setParticipants(personnelList.value);
+    // // 获取好友列表，并将结果存储在会话存储中。
+    // conference.setParticipants(personnelList.value);
   },
   {
     deep: true, // 开启深度监听
-    immediate: true
+    immediate: false
   }
 );
 
@@ -205,14 +205,13 @@ onMounted(() => {
   conference.on(RoomEvent.THEME_CHANGED, changeTheme);
   // 初始化设置语言
   conference.setLanguage('zh-CN');
-
+  // 获取办公人员列表，并将结果存储在会话存储中。
   EventBus.on("getOfficeWorkerListFun", (data) => {
-    // getMeetingRoomList();
-    console.log(data, "传来的会议时间");
-
+    console.log(data, "传来的人员列表");
+    console.log("%c =======================好友列表:=======================", "color: #52d10a;", data);
+    // 获取好友列表，并将结果存储在会话存储中。
+    conference.setParticipants(data);
   });
-
-
 
 });
 
