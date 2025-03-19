@@ -11,20 +11,28 @@
 </template>
 
 <script setup lang="ts">
-import { PreConferenceView, conference, RoomEvent, LanguageOption, ThemeOption ,FeatureButton} from '@tencentcloud/roomkit-web-vue3';
-import { getBasicInfo } from '@/config/basic-info-config';
+import {
+  PreConferenceView,
+  conference,
+  RoomEvent,
+  LanguageOption,
+  ThemeOption,
+  FeatureButton
+} from '@tencentcloud/roomkit-web-vue3';
+import {getBasicInfo} from '@/config/basic-info-config';
 import router from '@/router';
-import { useRoute } from 'vue-router';
-import { Ref, ref, reactive,onBeforeMount, onMounted, onUnmounted,watch } from 'vue';
+import {useRoute} from 'vue-router';
+import {Ref, ref, reactive, onBeforeMount, onMounted, onUnmounted, watch} from 'vue';
 import i18n from '../locales/index';
-import { getLanguage, getTheme } from  '../utils/utils';
+import {getLanguage, getTheme} from '../utils/utils';
 import * as Proto from "../proto/office_pb.js";
-import { jsCallUE, toFsString,webcloseui } from "@/utils/UEmethod";
+import {jsCallUE, toFsString, webcloseui} from "@/utils/UEmethod";
 import MsgId from "@/proto/msgid_pb.js";
-import { useFriendStore } from "@/store";
+import {useFriendStore} from "@/store";
 import EventBus from "@/utils/EventBus";
+
 const route = useRoute();
-const { roomId } = route.query;
+const {roomId} = route.query;
 const givenRoomId: Ref<string> = ref((roomId) as string);
 
 const userInfo = reactive({
@@ -35,21 +43,36 @@ const userInfo = reactive({
 
 const friendStore = useFriendStore();
 
-let personnelList: any = ref([]);
+
+const unsubscribe = friendStore.$onAction(({
+                                            name,        // action 名称
+                                            args,        // 传入参数
+                                            after,       // action 完成后的钩子
+                                            onError      // action 失败的钩子
+                                          }) => {
+  console.log(`执行 Action: ${name}`, args);
+
+  after((result) => {
+    console.log(`Action ${name} 执行成功`, result);
+  });
+
+  onError((error) => {
+    console.warn(`Action ${name} 执行失败`, error);
+  });
+});
+
 
 // 监听人员列表变化
 watch(
-  () => friendStore.friendList,
+  () => friendStore.isShowFriendInfo,
   (newVal, oldVal) => {
-    console.log("friendList changed:", newVal);
-    personnelList.value = newVal;
-    console.log("%c friendList:=======================", "color: #52d10a;", friendStore.friendList);
+    console.log("%c ====================监听好友列表:=======================", "color: #52d10a;", newVal);
     // // 获取好友列表，并将结果存储在会话存储中。
-    // conference.setParticipants(personnelList.value);
+    // conference.setParticipants(newVal);
   },
   {
     deep: true, // 开启深度监听
-    immediate: false
+    immediate: true,
   }
 );
 
@@ -74,7 +97,7 @@ async function checkRoomExistWhenCreateRoom(roomId: string) {
 
 /**
  * Generate room number when creating a room
-**/
+ **/
 async function generateRoomId(): Promise<string> {
   const roomId = String(Math.ceil(Math.random() * 1000000));
   const isRoomExist = await checkRoomExistWhenCreateRoom(String(roomId));
@@ -86,7 +109,7 @@ async function generateRoomId(): Promise<string> {
 
 /**
  * Processing Click [Create Room]
-**/
+ **/
 async function handleCreateRoom(roomOption: Record<string, any>) {
   setTUIRoomData('createRoom', roomOption);
   const roomId = await generateRoomId();
@@ -100,7 +123,7 @@ async function handleCreateRoom(roomOption: Record<string, any>) {
 
 /**
  * Processing Click [Enter Room]
-**/
+ **/
 async function handleEnterRoom(roomOption: Record<string, any>) {
   setTUIRoomData('enterRoom', roomOption);
   router.push({
@@ -123,11 +146,11 @@ function handleUpdateUserName(userName: string) {
 
 /**
  * Processing users click [Logout Login] in the upper left corner of the page
-**/
+ **/
 async function handleLogOut() {
-/**
- * The accessor handles the logout method
-**/
+  /**
+   * The accessor handles the logout method
+   **/
   webcloseui();
 }
 
@@ -144,9 +167,9 @@ async function handleInit() {
   userInfo.userId = currentUserInfo.userId;
   userInfo.userName = currentUserInfo.userName;
   userInfo.avatarUrl = currentUserInfo.avatarUrl;
-  const { userId, sdkAppId, userSig, userName, avatarUrl } = currentUserInfo;
-  await conference.login({ sdkAppId, userId, userSig });
-  await conference.setSelfInfo({ userName, avatarUrl });
+  const {userId, sdkAppId, userSig, userName, avatarUrl} = currentUserInfo;
+  await conference.login({sdkAppId, userId, userSig});
+  await conference.setSelfInfo({userName, avatarUrl});
 }
 
 const changeLanguage = (language: LanguageOption) => {
@@ -173,7 +196,7 @@ conference.setTheme('DARK');
 
 // 请求获得办公人员列表
 const getOfficeWorkerList = (data) => {
-  console.log(MsgId.C2S_GET_OFFICE_WORKER_LIST_REQ,'获得办公人员列表Id');
+  console.log(MsgId.C2S_GET_OFFICE_WORKER_LIST_REQ, '获得办公人员列表Id');
   // 请求获得办公人员
   let InfoReq = new Proto.default.C2SGetOfficeWorkerListReq();
   InfoReq.setSceneid(3001);
@@ -188,7 +211,7 @@ const getOfficeWorkerList = (data) => {
   console.log("Deserialized data:", userDeserialized.toObject());
   console.log(JSON.stringify(userDeserialized.toObject()));
 
-  jsCallUE(MsgId.C2S_GET_OFFICE_WORKER_LIST_REQ,bytes);
+  jsCallUE(MsgId.C2S_GET_OFFICE_WORKER_LIST_REQ, bytes);
 };
 
 function init() {
@@ -226,7 +249,7 @@ handleInit();
 </script>
 
 <style lang="scss" scoped>
-  :deep(.logo-container .svg-icon){
-    display: none;
-  }
+:deep(.logo-container .svg-icon) {
+  display: none;
+}
 </style>

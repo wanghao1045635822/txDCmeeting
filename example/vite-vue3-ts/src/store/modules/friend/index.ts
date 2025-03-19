@@ -19,6 +19,7 @@ const useFriendStore  = defineStore('useMeetingCenterStore', {
       // { userId: 'user_00012', userName: '王浩',  avatarUrl: '' },
     ],//好友列表数据
     friendInfo: {},//好友详情信息
+    isShowFriendInfo: false,//是否显示好友详情信息
   }),
   getters: {
     getFriendInfo(state) {
@@ -33,6 +34,10 @@ const useFriendStore  = defineStore('useMeetingCenterStore', {
     // 更新好友详情信息
     updateFriendInfo(data: any) {
       this.friendInfo = data;
+    },
+    // 更新是否显示好友详情信息
+    updateIsShowFriendInfo(data: any) {
+      this.isShowFriendInfo = data;
     },
   },
 });
