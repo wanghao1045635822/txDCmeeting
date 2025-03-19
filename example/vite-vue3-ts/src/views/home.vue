@@ -53,7 +53,7 @@ const unsubscribe = friendStore.$onAction(({
   console.log(`执行 Action: ${name}`, args);
 
   after((result) => {
-    console.log(`Action ${name} 执行成功`, result);
+    console.log(`Action ${name} 执行成功`, args);
   });
 
   onError((error) => {
@@ -221,6 +221,8 @@ function init() {
 
 onBeforeMount(() => {
   init();
+
+  friendStore.updateIsShowFriendInfo(true);
 });
 
 onMounted(() => {

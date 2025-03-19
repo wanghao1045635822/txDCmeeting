@@ -92,7 +92,6 @@ window.uemsgack = function (id, data) {
               });
               console.log("%c friendList:", "color: #52d10a;", friendList);
               friendStore.updateFriendListInfo(friendList);
-              friendStore.updateIsShowFriendInfo(true);
               EventBus.emit('getOfficeWorkerListFun', friendList)
             }
             break;
